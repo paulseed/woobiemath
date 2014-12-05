@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Math for my 2nd grader">
+    <meta name="author" content="Paul Seed">
+    <!-- make this-->
+    <link rel="icon" href="res/img/woobiemath.ico">
+
+    <title>Woobie Math</title>
+
+    <!-- Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="res/css/styles.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script type="text/javascript" src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body onload="init();">
+<div id="dialog" class="dialog">
+    <div id="dialogContent" onclick="dialog(true);">
+        <span id="placeholder"></span>
+        <img id="animal" src="#" width="370px"/>
+        <span id="placeholder2"></span>
+    </div>
+</div>
+<div id="hint" class="dialog">
+    <div id="hintContent" onclick="show_hint(0,0)">
+        <div id="hintText"></div>
+        <table id="hintTable">
+            <tr>
+                <td id="hint1" class="text numbers small"></td>
+                <td class="text plus small">+</td>
+                <td id="hint3" class="text numbers small"></td>
+                <td class="text plus small">=</td>
+                <td id="hint5" class="text numbers small"></td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row row-centered">
+        <div class="col-md-12">
+            <!--it might be cool to change the symbols on either side of the title to match the type of math being done-->
+            <div id="woobieMath">- Woobie Math -</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-1 text-right">
+            <div id="sound" onclick="toggleVolume();" title="Click to Mute">
+                <img src="res/img/sound.png" width="64" />
+            </div>
+            <div id="x-mark" onclick="toggleVolume();">
+                <img src="res/img/x-mark.png" width="48" />
+            </div>
+            <div id="reset" onclick="reset();" title="Click to reset">
+                <img src="res/img/reset.png" width="64" />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="sandbox">
+                <table cellpadding="0" cellspacing="0" class="equation">
+                    <tr>
+                        <td rowspan="3" class="text plus fixed-width">
+                            +
+                        </td>
+                    </tr>
+                    <tr>
+                        <td onclick="carry('carry100s');" class="fixed-width">
+                            <div class="text numbers invisible" id="invisible">&nbsp;</div>
+                            <div class="text numbers bigCarry" id="carry100s">1</div>
+                        </td>
+                        <td onclick="carry('carry10s');" class="fixed-width"
+                            ondblclick="show_hint(document.getElementById('top10s').innerHTML,document.getElementById('bottom10s').innerHTML);">
+                            <div class="text carry" id="carry10s">1</div>
+                            <div class="text numbers" id="top10s"></div>
+                        </td>
+                        <td class="fixed-width"
+                            ondblclick="show_hint(document.getElementById('top1s').innerHTML,document.getElementById('bottom1s').innerHTML)">
+                            <div class="text numbers" id="top1s"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-width">
+                            &nbsp;
+                        </td>
+                        <td class="fixed-width"
+                            ondblclick="show_hint(document.getElementById('bottom10s').innerHTML,document.getElementById('top10s').innerHTML);">
+                            <div class="text numbers" id="bottom10s"></div>
+                        <td class="fixed-width"
+                            ondblclick="show_hint(document.getElementById('bottom1s').innerHTML,document.getElementById('top1s').innerHTML)">
+                            <div class="text numbers" id="bottom1s"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="4" class="line">&nbsp;</th>
+                    </tr>
+                    <tr><!-- this is where the answers are-->
+                        <td>&nbsp;</td>
+                        <td class="answer-container fixed-width">
+                            <div id="answers100s">
+                                <table class="answers" id="answers100tbl">
+                                    <tr>
+                                        <td class="text answer answer-cell"
+                                            onclick="selectValue('100s',1,'nonext',true);">1
+                                        </td>
+                                        <td class="text answer answer-cell"
+                                            onclick="selectValue('100s',2,'nonext',true);">2
+                                        </td>
+                                        <td class="text answer answer-cell"
+                                            onclick="selectValue('100s',3,'nonext',true);">3
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text answer answer-cell"
+                                            onclick="selectValue('100s',4,'nonext',true);">4
+                                        </td>
+                                        <td class="text answer answer-cell"
+                                            onclick="selectValue('100s',5,'nonext',true);">5
+                                        </td>
+                                        <td class="text answer answer-cell"
+                                            onclick="selectValue('100s',6,'nonext',true);">6
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text answer answer-cell"
+                                            onclick="selectValue('100s',7,'nonext',true);">7
+                                        </td>
+                                        <td class="text answer answer-cell"
+                                            onclick="selectValue('100s',8,'nonext',true);">8
+                                        </td>
+                                        <td class="text answer answer-cell"
+                                            onclick="selectValue('100s',9,'nonext',true);">9
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td id="nothanks" colspan="3" class="text answer answer-cell"
+                                            onclick="selectValue('100s',13,'nonext',true);">
+                                            No Thanks
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div id="chosen100s" onclick="reloadAnswers('100s');">
+                                <div class="text numbers" id="selected100s"></div>
+                            </div>
+                        </td>
+                        <td class="answer-container fixed-width">
+                            <div id="answers10s">
+                                <table class="answers">
+                                    <tr>
+                                        <td class="text answer answer-cell"
+                                            onclick="selectValue('10s',1,'100s',false);">1
+                                        </td>
+                                        <td class="text answer answer-cell"
+                                            onclick="selectValue('10s',2,'100s',false);">2
+                                        </td>
+                                        <td class="text answer answer-cell"
+                                            onclick="selectValue('10s',3,'100s',false);">3
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text answer answer-cell"
+                                            onclick="selectValue('10s',4,'100s',false);">4
+                                        </td>
+                                        <td class="text answer answer-cell"
+                                            onclick="selectValue('10s',5,'100s',false);">5
+                                        </td>
+                                        <td class="text answer answer-cell"
+                                            onclick="selectValue('10s',6,'100s',false);">6
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text answer answer-cell"
+                                            onclick="selectValue('10s',7,'100s',false);">7
+                                        </td>
+                                        <td class="text answer answer-cell"
+                                            onclick="selectValue('10s',8,'100s',false);">8
+                                        </td>
+                                        <td class="text answer answer-cell"
+                                            onclick="selectValue('10s',9,'100s',false);">9
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text answer"></td>
+                                        <td class="text answer answer-cell"
+                                            onclick="selectValue('10s',0,'100s',false);">0
+                                        </td>
+                                        <td class="text answer"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div id="chosen10s" onclick="reloadAnswers('10s');">
+                                <div class="text numbers" id="selected10s"></div>
+                            </div>
+                        </td>
+                        <td class="answer-container fixed-width">
+                            <div id="answers1s">
+                                <table class="answers">
+                                    <tr>
+                                        <td class="text answer answer-cell" onclick="selectValue('1s',1,'10s',false);">
+                                            1
+                                        </td>
+                                        <td class="text answer answer-cell" onclick="selectValue('1s',2,'10s',false);">
+                                            2
+                                        </td>
+                                        <td class="text answer answer-cell" onclick="selectValue('1s',3,'10s',false);">
+                                            3
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text answer answer-cell" onclick="selectValue('1s',4,'10s',false);">
+                                            4
+                                        </td>
+                                        <td class="text answer answer-cell" onclick="selectValue('1s',5,'10s',false);">
+                                            5
+                                        </td>
+                                        <td class="text answer answer-cell" onclick="selectValue('1s',6,'10s',false);">
+                                            6
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text answer answer-cell" onclick="selectValue('1s',7,'10s',false);">
+                                            7
+                                        </td>
+                                        <td class="text answer answer-cell" onclick="selectValue('1s',8,'10s',false);">
+                                            8
+                                        </td>
+                                        <td class="text answer answer-cell" onclick="selectValue('1s',9,'10s',false);">
+                                            9
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text answer"></td>
+                                        <td class="text answer answer-cell" onclick="selectValue('1s',0,'10s',false);">
+                                            0
+                                        </td>
+                                        <td class="text answer"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div id="chosen1s" onclick="reloadAnswers('1s');">
+                                <div class="text numbers" id="selected1s"></div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <div id="button-container">
+                    <div id="skip" onclick="skip();">
+                        <img id="skipImg" src="res/img/right.png" title="Click to Skip"/>
+                    </div>
+                    <div id="submit-container">
+                        <input type="button" id="submit" value="go" onclick="checkAnswer();"/>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-1 text-center">
+            <div id="count" onclick="showPow();">
+                <div id="pow"><img id="powImg" src="res/img/pow.png"/></div>
+                <div id="powXX"><img id="powImgXX" src="res/img/pow.png"/></div>
+                <div id="level" >Level:</div>
+                <div id="levelNum">1</div>
+                <table>
+                    <tr>
+                        <td><div class="smiley" id="stage-10"><img id="face-10" src="res/img/faces/12.gif" width="54"/></div></td>
+                        <td><div class="smiley" id="stage-9"><img id="face-9" src="res/img/faces/12.gif" width="54"/></div></td>
+                    </tr>
+                    <tr>
+                        <td><div class="smiley" id="stage-7"><img id="face-7" src="res/img/faces/12.gif" width="54"/></div></td>
+                        <td><div class="smiley" id="stage-8"><img id="face-8" src="res/img/faces/12.gif" width="54"/></div></td>
+                    </tr>
+                    <tr>
+                        <td><div class="smiley" id="stage-6"><img id="face-6" src="res/img/faces/12.gif" width="54"/></div></td>
+                        <td><div class="smiley" id="stage-5"><img id="face-5" src="res/img/faces/12.gif" width="54"/></div></td>
+                    </tr>
+                    <tr>
+                        <td><div class="smiley" id="stage-3"><img id="face-3" src="res/img/faces/12.gif" width="54"/></div></td>
+                        <td><div class="smiley" id="stage-4"><img id="face-4" src="res/img/faces/12.gif" width="54"/></div></td>
+                    </tr>
+                    <tr>
+                        <td><div class="smiley" id="stage-2"><img id="face-2" src="res/img/faces/12.gif" width="54"/></div></td>
+                        <td><div class="smiley" id="stage-1"><img id="face-1" src="res/img/faces/12.gif" width="54"/></div></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</div>
+<!-- /.container -->
+<footer class="footer">
+    <div class="container">
+        <div class="row row-centered">
+            <div class="col-md-12 padded">
+                <div>Designed and Developed by Madeline and Paul Seed</div>
+                <div>Woobie Math &copy; <span id="copyDate"></span>.</div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/app.js"></script>
+</body>
+</html>
